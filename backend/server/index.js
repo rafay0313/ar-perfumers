@@ -360,7 +360,7 @@ const server = http.createServer(async (req, res) => {
       const authToken = randomUUID();
       tokenToUserId.set(authToken, user.id);
 
-      const frontendBase = process.env.FRONTEND_URL || "https://ar-perfumers.onrender.com";
+      const frontendBase = process.env.FRONTEND_URL || "https://arperfumers.netlify.app";
       const magicLink = `${frontendBase}/login?token=${magicToken}`;
       console.log(`[Magic Link] ${email} -> ${magicLink}`);
 
