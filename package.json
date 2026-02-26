@@ -6,6 +6,7 @@
   "scripts": {
     "build": "vite build frontend --config frontend/vite.config.ts",
     "dev": "vite --config frontend/vite.config.ts --root frontend",
+    "start": "node backend/server/index.js",
     "server": "node backend/server/index.js"
   },
   "dependencies": {
