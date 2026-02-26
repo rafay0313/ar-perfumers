@@ -1,0 +1,161 @@
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --font-size: 16px;
+  --background: #0B0B0B;
+  --foreground: #F5F5F5;
+  --card: #151515;
+  --card-foreground: #F5F5F5;
+  --popover: #151515;
+  --popover-foreground: #F5F5F5;
+  --primary: #C8A45D;
+  --primary-foreground: #0B0B0B;
+  --secondary: #1A1A1A;
+  --secondary-foreground: #F5F5F5;
+  --muted: #262626;
+  --muted-foreground: #A1A1A1;
+  --accent: #C8A45D;
+  --accent-foreground: #0B0B0B;
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+  --border: rgba(200, 164, 93, 0.2);
+  --input: transparent;
+  --input-background: #151515;
+  --switch-background: #C8A45D;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: #C8A45D;
+  --radius: 0rem;
+  
+  /* Brand specific */
+  --brand-gold: #C8A45D;
+  --brand-gold-glow: rgba(200, 164, 93, 0.3);
+  --brand-black: #0B0B0B;
+  --brand-off-white: #F5F5F5;
+  
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Montserrat', sans-serif;
+  --font-cinzel: 'Cinzel', serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-switch-background: var(--switch-background);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+  --font-cinzel: var(--font-cinzel);
+}
+
+@layer base {
+  html, body, #root {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  * {
+    border-color: var(--border);
+    outline-color: rgba(200, 164, 93, 0.5);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-image: radial-gradient(circle at 50% -20%, #1a1a1a 0%, #0b0b0b 100%);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    letter-spacing: -0.025em;
+  }
+
+  button {
+    cursor: pointer;
+    border-radius: 9999px;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
+}
+
+/* Custom Utilities */
+.gold-glow {
+  box-shadow: 0 0 20px var(--brand-gold-glow);
+}
+
+.gold-gradient {
+  background: linear-gradient(135deg, #C8A45D 0%, #E8D1A3 50%, #C8A45D 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-gold-gradient {
+  background: linear-gradient(135deg, #C8A45D 0%, #E8D1A3 50%, #C8A45D 100%);
+}
+
+.shimmer-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-bg::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(200, 164, 93, 0) 0%,
+    rgba(200, 164, 93, 0.05) 50%,
+    rgba(200, 164, 93, 0) 100%
+  );
+  transform: rotate(30deg);
+  animation: shimmer-anim 10s infinite linear;
+}
+
+@keyframes shimmer-anim {
+  0% { transform: translate(-10%, -10%) rotate(30deg); }
+  100% { transform: translate(10%, 10%) rotate(30deg); }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0b0b;
+}
+::-webkit-scrollbar-thumb {
+  background: #262626;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C8A45D;
+}
