@@ -44,7 +44,11 @@ export interface Order {
   shippingAddress?: ShippingAddress;
 }
 
-const API_BASE_URL = (import.meta.env.VITE_API_URL as string | undefined) || (typeof window !== "undefined" && window.location.hostname !== "localhost" ? `${window.location.origin}/api` : "http://localhost:4000/api");
+const API_BASE_URL =
+  (import.meta.env.VITE_API_URL as string | undefined) ||
+  (typeof window !== "undefined" && window.location.hostname === "localhost"
+    ? "http://localhost:4000/api"
+    : "https://ar-perfumers.onrender.com/api");
 const AUTH_TOKEN_KEY = "auth_token";
 const AUTH_USER_KEY = "auth_user";
 
