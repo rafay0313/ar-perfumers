@@ -360,7 +360,7 @@ const server = http.createServer(async (req, res) => {
       const authToken = randomUUID();
       tokenToUserId.set(authToken, user.id);
 
-      const frontendBase = process.env.FRONTEND_URL || "http://localhost:5173";
+      const frontendBase = process.env.FRONTEND_URL || "https://ar-perfumers.onrender.com";
       const magicLink = `${frontendBase}/login?token=${magicToken}`;
       console.log(`[Magic Link] ${email} -> ${magicLink}`);
 
