@@ -218,7 +218,7 @@ async function notifySellerByEmail(order, buyer) {
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      from: process.env.SENDER_EMAIL || "onboarding@resend.dev",
+      from: process.env.SENDER_EMAIL || "info@arperfumers.com",
       to: [SELLER_EMAIL],
       subject: `New Order ${order.id} - ${buyer.email}`,
       text,
