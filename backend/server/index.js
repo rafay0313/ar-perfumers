@@ -509,8 +509,17 @@ const server = http.createServer(async (req, res) => {
         shippingAddress: body.shippingAddress,
       };
       orders.unshift(order);
-      const emailDispatch = await notifySellerByEmail(order, user);
-      order.emailDispatch = emailDispatch;
+      try {
+        const emailDispatch = await notifySellerByEmail(order, user);
+        order.emailDispatch = emailDispatch;
+      } catch (emailError) {
+        order.emailDispatch = {
+          sent: false,
+          provider: "resend",
+          error: String(emailError),
+        };
+        console.error("[Order Email Error]", emailError);
+      }
       sendJson(res, 201, order);
       return;
     }
