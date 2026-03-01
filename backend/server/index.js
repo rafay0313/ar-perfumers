@@ -130,6 +130,7 @@ const orders = [];
 const tokenToUserId = new Map();
 const magicLinkTokens = new Map();
 const SELLER_EMAIL = process.env.SELLER_EMAIL || "abdurrafayfarhan3@gmail.com";
+const DEFAULT_SENDER_EMAIL = "onboarding@resend.dev";
 
 function normalizeDiscount(value) {
   const parsed = Number(value || 0);
@@ -211,28 +212,53 @@ async function notifySellerByEmail(order, buyer) {
     </div>
   `;
 
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      from: process.env.SENDER_EMAIL || "info@arperfumers.com",
-      to: [SELLER_EMAIL],
-      subject: `New Order ${order.id} - ${buyer.email}`,
-      text,
-      html,
-    }),
-  });
+  async function sendWithSender(fromEmail) {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        from: fromEmail,
+        to: [SELLER_EMAIL],
+        subject: `New Order ${order.id} - ${buyer.email}`,
+        text,
+        html,
+      }),
+    });
 
-  if (!response.ok) {
-    const errText = await response.text();
-    throw new Error(`Order email failed: ${errText}`);
+    if (!response.ok) {
+      const errText = await response.text();
+      return { ok: false, error: errText };
+    }
+
+    const providerData = await response.json();
+    return { ok: true, id: providerData?.id || null };
   }
 
-  const providerData = await response.json();
-  return { sent: true, provider: "resend", id: providerData?.id || null };
+  const configuredSender = process.env.SENDER_EMAIL || DEFAULT_SENDER_EMAIL;
+  let delivery = await sendWithSender(configuredSender);
+  let usedSender = configuredSender;
+
+  // If custom sender fails (commonly due to unverified domain), retry with Resend onboarding sender.
+  if (!delivery.ok && configuredSender !== DEFAULT_SENDER_EMAIL) {
+    console.warn(`[Email] primary sender failed (${configuredSender}), retrying with ${DEFAULT_SENDER_EMAIL}`);
+    delivery = await sendWithSender(DEFAULT_SENDER_EMAIL);
+    usedSender = DEFAULT_SENDER_EMAIL;
+  }
+
+  if (!delivery.ok) {
+    throw new Error(`Order email failed: ${delivery.error}`);
+  }
+
+  return {
+    sent: true,
+    provider: "resend",
+    id: delivery.id,
+    from: usedSender,
+    to: SELLER_EMAIL,
+  };
 }
 
 function sendJson(res, status, data) {
